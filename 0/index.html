@@ -39,9 +39,10 @@
       background: white;
       padding: 4px;
     }
-    p {
-      margin-top: 10px;
-      text-align: center;
+    .description {
+      margin: 10px auto 30px; /* space above and below */
+      max-width: 50%;          /* half the width of the page */
+      text-align: center;      /* center the paragraph */
     }
   </style>
 </head>
@@ -55,7 +56,7 @@
     <img src="images/image5.png" alt="Part 1 Image 5">
     <img src="images/image6.png" alt="Part 1 Image 6">
   </div>
-  <p>
+  <p class="description">
     These photos were taken by my roommate in my apartment. With the camera closer to my face, my nose looked larger and my face appeared stretched compared to when the camera was farther away.
   </p>
 
@@ -64,7 +65,7 @@
     <img src="images/image3.png" alt="Part 2 Image 3">
     <img src="images/image4.png" alt="Part 2 Image 4">
   </div>
-  <p>
+  <p class="description">
     As I moved closer to the subject, parts of the scene were cut off, and details like the light post and tree trunk appeared longer and more distorted.
   </p>
 
@@ -72,10 +73,9 @@
   <div class="images">
     <img src="images/image7.gif" alt="Part 3 GIF" style="max-width:400px;">
   </div>
-  <p>
+  <p class="description">
     I filmed this dolly zoom of my co-interns in Seattle over the summer. The effect is one of my favorites, so I decided to use it for class.
   </p>
 
 </body>
 </html>
-
