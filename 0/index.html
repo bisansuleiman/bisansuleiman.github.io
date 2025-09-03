@@ -23,20 +23,20 @@
     }
     .images {
       display: flex;
-      justify-content: center; /* center images horizontally */
-      flex-wrap: wrap;         /* allow wrapping on smaller screens */
+      justify-content: center; /* center horizontally */
+      flex-wrap: wrap;         /* wrap on smaller screens */
       gap: 20px;               /* space between images */
       margin: 20px 0;
     }
     .images img {
-      max-width: 300px;  /* control image size */
-      height: auto;
+      max-width: 300px;   /* scale down */
+      height: auto;       /* preserve original ratio */
       border: 1px solid #ccc;
       border-radius: 8px;
     }
     p {
       margin-top: 10px;
-      text-align: center; /* center the description */
+      text-align: center;
     }
   </style>
 </head>
@@ -46,8 +46,8 @@
   <!-- Part 1 -->
   <h2>Part 1</h2>
   <div class="images">
-    <img src="images/image1.png" alt="Part 1 Image 1">
     <img src="images/image2.png" alt="Part 1 Image 2">
+    <img src="images/image1.png" alt="Part 1 Image 1">
     <img src="images/image5.png" alt="Part 1 Image 5">
     <img src="images/image6.png" alt="Part 1 Image 6">
   </div>
@@ -68,7 +68,7 @@
   <!-- Part 3 -->
   <h2>Part 3</h2>
   <div class="images">
-    <img src="images/image7.gif" alt="Part 3 GIF">
+    <img src="images/image7.gif" alt="Part 3 GIF" style="max-width:400px;">
   </div>
   <p>
     description of Part 3.
@@ -76,3 +76,4 @@
 
 </body>
 </html>
+
