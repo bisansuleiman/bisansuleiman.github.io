@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 20px;
       line-height: 1.6;
@@ -19,21 +19,24 @@
       margin-top: 40px;
       border-bottom: 2px solid #ddd;
       padding-bottom: 5px;
+      text-align: center;
     }
     .images {
       display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
+      justify-content: center; /* center images horizontally */
+      flex-wrap: wrap;         /* allow wrapping on smaller screens */
+      gap: 20px;               /* space between images */
       margin: 20px 0;
     }
     .images img {
-      max-width: 100%;
+      max-width: 300px;  /* control image size */
       height: auto;
       border: 1px solid #ccc;
       border-radius: 8px;
     }
     p {
       margin-top: 10px;
+      text-align: center; /* center the description */
     }
   </style>
 </head>
