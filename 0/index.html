@@ -13,10 +13,12 @@
       background: linear-gradient(to bottom right, #f9f9f9, #e6e6e6);
       color: #222;
     }
+
     h1 {
       text-align: center;
       margin-bottom: 40px;
     }
+
     h2 {
       margin-top: 40px;
       margin-bottom: 10px;
@@ -24,54 +26,71 @@
       font-size: 20px;
       font-weight: bold;
     }
-    .images {
+
+    /* Wrapper to limit width of the image section */
+    .images-wrapper {
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin: 20px 0;
+      margin: 20px auto;
+      max-width: 600px; /* controls overall width of images */
     }
+
+    .images {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     .images img {
-      max-width: 300px;
-      height: auto; /* preserve aspect ratio */
+      max-width: 100%;  /* scales images to fit wrapper */
+      height: auto;     /* keeps original ratio */
       border: 1px solid #ccc;
       border-radius: 8px;
       background: white;
       padding: 4px;
     }
+
     .description {
-      margin: 10px auto 30px; /* space above and below */
-      max-width: 50%;          /* half the width of the page */
-      text-align: center;      /* center the paragraph */
+      margin: 10px auto 30px;
+      max-width: 50%;  /* half of page width */
+      text-align: center;
     }
   </style>
 </head>
 <body>
+
   <h1>CS180 Project 0</h1>
 
   <h2>1 - Selfie: The Wrong Way vs. The Right Way</h2>
-  <div class="images">
-    <img src="images/image2.png" alt="Part 1 Image 2">
-    <img src="images/image1.png" alt="Part 1 Image 1">
-    <img src="images/image5.png" alt="Part 1 Image 5">
-    <img src="images/image6.png" alt="Part 1 Image 6">
+  <div class="images-wrapper">
+    <div class="images">
+      <img src="images/image2.png" alt="Part 1 Image 2">
+      <img src="images/image1.png" alt="Part 1 Image 1">
+      <img src="images/image5.png" alt="Part 1 Image 5">
+      <img src="images/image6.png" alt="Part 1 Image 6">
+    </div>
   </div>
   <p class="description">
     These photos were taken by my roommate in my apartment. With the camera closer to my face, my nose looked larger and my face appeared stretched compared to when the camera was farther away.
   </p>
 
   <h2>2 - Architectural Perspective Compression</h2>
-  <div class="images">
-    <img src="images/image3.png" alt="Part 2 Image 3">
-    <img src="images/image4.png" alt="Part 2 Image 4">
+  <div class="images-wrapper">
+    <div class="images">
+      <img src="images/image3.png" alt="Part 2 Image 3">
+      <img src="images/image4.png" alt="Part 2 Image 4">
+    </div>
   </div>
   <p class="description">
     As I moved closer to the subject, parts of the scene were cut off, and details like the light post and tree trunk appeared longer and more distorted.
   </p>
 
   <h2>3 - Dolly Zoom</h2>
-  <div class="images">
-    <img src="images/image7.gif" alt="Part 3 GIF" style="max-width:400px;">
+  <div class="images-wrapper">
+    <div class="images">
+      <img src="images/image7.GIF" alt="Part 3 GIF" style="max-width:400px;">
+    </div>
   </div>
   <p class="description">
     I filmed this dolly zoom of my co-interns in Seattle over the summer. The effect is one of my favorites, so I decided to use it for class.
@@ -79,3 +98,4 @@
 
 </body>
 </html>
+
