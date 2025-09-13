@@ -1,1 +1,164 @@
-Proj 1 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CS180 Project 1: Image Alignment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    h2 {
+      margin-top: 50px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    .image-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .image-container {
+      text-align: center;
+      max-width: 30%;
+    }
+    .image-container img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+    .caption {
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #555;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .grid img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+    .grid-caption {
+      text-align: center;
+      margin-top: 6px;
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CS180 Project 1: Image Alignment</h1>
+
+  <div class="section">
+    <h2>Approach</h2>
+    <p>
+      <!-- Write about your approach here -->
+      I first started with exploring the layering of the 3 channels (R, G, B) and used
+      <code>np.roll</code> and <code>np.stack</code> to align them into one image.
+      Then I tried finding optimal alignment using the SSD metric on a smaller image.
+      After that, I implemented the pyramid method to make the search much faster on large images.
+      At first I struggled without a center/bias variable, but eventually realized scaling down and
+      using a stable coordinate system was key. After tuning the metrics, the alignment worked well.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>Single Scale Method</h2>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="single1.jpg" alt="Single scale result 1">
+        <div class="caption">Caption for single scale image 1.</div>
+      </div>
+      <div class="image-container">
+        <img src="single2.jpg" alt="Single scale result 2">
+        <div class="caption">Caption for single scale image 2.</div>
+      </div>
+      <div class="image-container">
+        <img src="single3.jpg" alt="Single scale result 3">
+        <div class="caption">Caption for single scale image 3.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Pyramid Method</h2>
+    <div class="grid">
+      <div>
+        <img src="pyramid1.jpg" alt="Pyramid result 1">
+        <div class="grid-caption">Caption for pyramid image 1.</div>
+      </div>
+      <div>
+        <img src="pyramid2.jpg" alt="Pyramid result 2">
+        <div class="grid-caption">Caption for pyramid image 2.</div>
+      </div>
+      <div>
+        <img src="pyramid3.jpg" alt="Pyramid result 3">
+        <div class="grid-caption">Caption for pyramid image 3.</div>
+      </div>
+      <div>
+        <img src="pyramid4.jpg" alt="Pyramid result 4">
+        <div class="grid-caption">Caption for pyramid image 4.</div>
+      </div>
+      <div>
+        <img src="pyramid5.jpg" alt="Pyramid result 5">
+        <div class="grid-caption">Caption for pyramid image 5.</div>
+      </div>
+      <div>
+        <img src="pyramid6.jpg" alt="Pyramid result 6">
+        <div class="grid-caption">Caption for pyramid image 6.</div>
+      </div>
+      <div>
+        <img src="pyramid7.jpg" alt="Pyramid result 7">
+        <div class="grid-caption">Caption for pyramid image 7.</div>
+      </div>
+      <div>
+        <img src="pyramid8.jpg" alt="Pyramid result 8">
+        <div class="grid-caption">Caption for pyramid image 8.</div>
+      </div>
+      <div>
+        <img src="pyramid9.jpg" alt="Pyramid result 9">
+        <div class="grid-caption">Caption for pyramid image 9.</div>
+      </div>
+      <div>
+        <img src="pyramid10.jpg" alt="Pyramid result 10">
+        <div class="grid-caption">Caption for pyramid image 10.</div>
+      </div>
+      <div>
+        <img src="pyramid11.jpg" alt="Pyramid result 11">
+        <div class="grid-caption">Caption for pyramid image 11.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Results on Own Images</h2>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="own1.jpg" alt="Own result 1">
+        <div class="caption">Caption for own image 1.</div>
+      </div>
+      <div class="image-container">
+        <img src="own2.jpg" alt="Own result 2">
+        <div class="caption">Caption for own image 2.</div>
+      </div>
+      <div class="image-container">
+        <img src="own3.jpg" alt="Own result 3">
+        <div class="caption">Caption for own image 3.</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
