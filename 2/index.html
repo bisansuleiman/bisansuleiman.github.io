@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CS180 Project 2: Fun with Filters and Frequencies!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      margin-top: 40px;
+    }
+    h2 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+    .section {
+      margin-bottom: 50px;
+    }
+    .image-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .image-container {
+      text-align: center;
+      max-width: 30%;
+    }
+    .image-container img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+    .caption {
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #555;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .grid img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+    .grid-caption {
+      text-align: center;
+      margin-top: 6px;
+      font-size: 0.9em;
+      color: #555;
+    }
+    code {
+      background-color: #f5f5f5;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CS180 Project 2: Fun with Filters and Frequencies!</h1>
+
+  <!-- Part 1 -->
+  <div class="section">
+    <h2>Part 1: Fun with Filters</h2>
+
+    <h3>1.1 Convolutions from Scratch</h3>
+    <p>
+      I first started by implementi ng the conv4 function using 4 for loops, which started out very slow. This involved going through each pixel and applying the kernel to the surrounding pixels. I then optimized this by reducing the number of for loops to 2, using numpy array operations to compute the dot product of kernel and image patch, which improved performance. 
+      Lastly, I compared my implementation with scipy's convolve2d function, which showed similar results but faster perfromance.
+      
+      The results of applying a 9x9 box filter and finite difference filters in x and y directions are shown below.
+    </p>
+    <div>
+        <code>conv4</code> function implemented in <code>convolve.py</code>:
+        <pre>
+            <code, class="language-python"> 
+            def conv4(image, kernel):
+                # pad image 
+                kernel_h = kernel.shape[0]
+                kernel_w = kernel.shape[1]
+                image_h = image.shape[0]
+                image_w = image.shape[1]
+
+                pad_image = np.pad(image, [(kernel_h//2,kernel_h//2 ) , (kernel_w//2, kernel_w//2)], mode='constant')
+
+                out = np.zeros_like(image, dtype=float)
+                # flip kernel 
+                flip_kernel = np.flip(kernel, axis=(0,1))
+                # for every block in position i,j , compute the dot product of filter and image 
+                for x in range(image_h):
+                    # move kernel over image 
+                    for y in range(image_w):
+                        curr = 0.0
+                        for i in range(kernel_h):
+                            for j in range(kernel_w):
+                                curr += pad_image[x + i, y + j] * flip_kernel[i, j]
+                        out[x,y] = curr
+                return out
+
+
+
+        </code>
+        </pre>
+        <code>conv2</code> function implemented in <code>convolve.py</code>:
+        <pre>
+            <code, class="language-python"> 
+            def conv2(image, kernel):
+                # pad image 
+                kernel_h = kernel.shape[0]
+                kernel_w = kernel.shape[1]
+                image_h = image.shape[0]
+                image_w = image.shape[1]
+
+                pad_image = np.pad(image, [(kernel_h//2,kernel_h//2 ) , (kernel_w//2, kernel_w//2)], mode='constant')
+
+                out = np.zeros_like(image, dtype=float)
+                # flip kernel 
+                flip_kernel = np.flip(kernel, axis=(0,1))
+                # for every block in position i,j , compute the dot product of filter and image 
+                for i in range(image_h):
+                    # move kernel over image 
+                    for j in range(image_w):
+                        i_end = i+kernel_h
+                        j_end = j+kernel_w
+                        patch = pad_image[i:i_end, j:j_end]
+                        # dot product
+                        out[i,j]= np.sum(patch * flip_kernel)
+                return out
+
+
+
+    </code>
+        </pre>
+    
+
+    </div>
+     <p>
+      
+      The results of applying a 9x9 box filter and finite difference filters in x and y directions using `conv2D` are shown below:
+    </p>
+
+    
+    <div class="image-row">
+      <div class="image-container">
+        <img src="./out/me_conv2D.jpg" alt="Box filter result">
+        <div class="caption">9x9 Box filter applied</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/me_conv2D_dx.jpg" alt="Dx filter result">
+        <div class="caption">Finite difference Dx</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/me_conv2D_dy.jpg" alt="Dy filter result">
+        <div class="caption">Finite difference Dy</div>
+      </div>
+    </div>
+
+    <h3>1.2 Finite Difference Operator</h3>
+    <p>
+        I found that we are able to identify edges in the image in different directions using finite difference operators. 
+
+        The partial derivative in the x direction shows the vertical edges while the y direction shows the horizontal edges. 
+
+        I then computed the gradient magnitude image by combining the partial derivatives in both directions, which highlights all edges regardless of orientation. 
+
+        Finally, I binarized the gradient magnitude image using a threshold to create a clear edge map. The higher the threshold, the less noise present in the final image, but the more prone to losing Important details.
+
+    </p>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="./out/cameraman_dx_conv.jpg" alt="Partial derivative X">
+        <div class="caption">Partial derivative (Dx)</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/cameraman_dy_conv.jpg" alt="Partial derivative Y">
+        <div class="caption">Partial derivative (Dy)</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/grad_mag_1x2.jpg" alt="Gradient magnitude">
+        <div class="caption">Gradient magnitude image</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/edges3_1o2.jpg" alt="Binarized edges">
+        <div class="caption">Binarized edge image</div>
+      </div>
+    </div>
+
+    <h3>1.3 Derivative of Gaussian (DoG) Filter</h3>
+    <p>
+
+        By applying a gaussian filter to the original image before applying a finite difference operator, we can isolate a lot of the noise, while preserving really important details. Further, I was able to see edges in the background of outline of a skyline and buildings in the background, even while using the same threshold values I used in the regular gradient magnitde image that didn't display such details.
+    </p>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="./out/cameraman_blur_1x3.jpg" alt="Gaussian filter result">
+        <div class="caption">Gaussian smoothed image</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/cameraman_gaus_grad_mag_1o3.jpg" alt="DoG filter result">
+        <div class="caption">DoG filter applied</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/dog_filters.png" alt="DoG filters">
+        <div class="caption">DoG filters</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Part 2 -->
+  <div class="section">
+    <h2>Part 2: Fun with Frequencies!</h2>
+
+    <h3>2.1 Image Sharpening</h3>
+    <p>
+      The `unsharpen` function works by isolating the high frequencies from an image by subtracting a gaussian convolution of that same image from the original image. By doing this, the gaussian convolved image contains all the low frequencies of the original image, and subtracting it from the original image leaves only the high frequencies. We can then add these high frequencies back to the original image to get a sharpened version of the original image. 
+
+
+    </p>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="./out/blur_taj_2x1.jpg" alt="Blurred Taj">
+        <div class="caption">Blurred Taj Mahal</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/high_taj_2x1.jpg" alt="High frequency Taj">
+        <div class="caption">High frequency component</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/sharper_taj_2x1.jpg" alt="Sharpened Taj">
+        <div class="caption">Sharpened Taj</div>
+      </div>
+    </div>
+    <p>
+      Then, I applied the unsharpen function to a blurred image, the result contains less details but still has a really sharp appearance. 
+    </p>
+    <div>
+        <img src="./out/sharper_blur.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Laplacian stack levels</div>
+    </div>
+    <div>
+        <img src="./out/sharper1.png" alt="Apple Laplacian stack">
+        <div class="grid-caption">Laplacian stack levels</div>
+    </div>
+    <div>
+        <img src="./out/sharper2.png" alt="Apple Laplacian stack">
+        <div class="grid-caption">Laplacian stack levels</div>
+    </div>
+
+    <h3>2.2 Hybrid Images</h3>
+    <p>
+      Show input images, Fourier transforms, filtered images, and final hybrid. Include 3 hybrid results total.
+    </p>
+    <div class="grid">
+      <div>
+        <img src="./data/DerekPicture.jpg" alt="Image 1">
+        <div class="grid-caption">Input image 1 (Derek)</div>
+      </div>
+      <div>
+        <img src="./out/prof_hybrid.png" alt="Image 2">
+        <div class="grid-caption">Derek/Nutmeg Hybrid Result</div>
+      </div>
+      <div>
+        <img src="./out/wendy-out.png" alt="Hybrid result">
+        <div class="grid-caption">Mariah Carey/Wendy Williams Hybrid result</div>
+      </div>
+    </div>
+    
+    <h4>
+        Hybrid Derek + Nutmeg Process:
+    </h4>
+    <p>
+      The entire process for creating the hybrid image involved several steps:
+    </p>
+    <div class="grid">
+      
+      <div>
+        <img src="./out/nutmeg.jpg" alt="Image 2">
+        <div class="grid-caption">Aligned Nutmeg</div>
+      </div>
+      <div>
+        <img src="./out/prof_blur.png" alt="Blurred">
+        <div class="grid-caption">Blurred and aligned Derek</div>
+      </div>
+      <div>
+        <img src="./out/cat_high.png" alt="high frequency image">
+        <div class="grid-caption">High frequency and aligned Nutmeg</div>
+      </div>
+      <div>
+        <img src="./out/prof_hybrid.png" alt="Hybrid result">
+        <div class="grid-caption">Hybrid result</div>
+      </div>
+      <div>
+        <img src="./out/fft.png" alt="Fourier transforms">
+        <div class="grid-caption">Fourier Transform Result of Hybrid</div>
+      </div>
+    </div>
+    
+    <h3>2.3 Gaussian and Laplacian Stacks</h3>
+    <p>
+      Visualize Gaussian and Laplacian stacks of apple/orange images.
+    </p>
+    <!-- <div class="grid"> -->
+      <div>
+        <img src="./out/gaus_orange.png" alt="Orange Gaussian stack">
+        <div class="grid-caption">Gaussian stack levels</div>
+      </div>
+    <!-- </div> -->
+    <div>
+        <img src="./out/lap_orange.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Laplacian stack levels</div>
+    </div>
+    <div>
+        <img src="./out/gaus_apple.png" alt="Apple Laplacian stack">
+        <div class="grid-caption">Laplacian stack levels</div>
+    </div>
+    <div>
+        <img src="./out/lap_apple.png" alt="Apple Laplacian stack">
+        <div class="grid-caption">Laplacian stack levels</div>
+    </div>
+
+    <h3>2.4 Multiresolution Blending (Oraple)</h3>
+    <pt>
+      Using the custom masks, and the laplacian stacks we were able to create a blend of apple and orange, a blend of an uncle and a landscape, and a blend of a mouse and a sunset.
+    </p>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="./out/oraple_final.jpg" alt="Oraple">
+        <div class="caption">Classic Oraple Blend</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/man_land_2x4.png" alt="Custom blend 1">
+        <div class="caption">Uncle Balance Blend</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/rat_sunset.jpg" alt="Custom blend 2">
+        <div class="caption">Rat Sunset Blend</div>
+      </div>
+    </div>
+  </div>
+  <h4>
+        More on Oraple Blend
+    </h4>
+    <p>
+      The entire process for creating the hybrid image involved several steps, Larger sigma values make the Gaussian images blurrier, while smaller sigma values preserve more high-frequency details. Increasing diff exaggerates the differences between levels of the Laplacian stack. To retain fine details in the Oraple blend while still ensuring smooth transitions, I chose a small sigma of 0.5 and a small diff of 0.3.
+    </p>
+    <div class="grid">
+      
+      <div>
+        <img src="./out/final_apple_level_0.jpg" alt="Image 2">
+        <div class="grid-caption">Aligned Nutmeg</div>
+      </div>
+      <div>
+        <img src="./out/oraple_level_4.jpg" alt="Blurred">
+        <div class="grid-caption">Blurred and aligned Derek</div>
+      </div>
+      <div>
+        <img src="./out/final_orange_level_0.jpg" alt="high frequency image">
+        <div class="grid-caption">High frequency and aligned Nutmeg</div>
+      </div>
+      <div>
+        <img src="./out/apple_level_5.jpg" alt="high frequency image">
+        <div class="grid-caption">High frequency and aligned Nutmeg</div>
+      </div>
+      <div>
+        <img src="./out/oraple_final_before2.png" alt="Hybrid result">
+        <div class="grid-caption">Hybrid result</div>
+      </div>
+      <div>
+        <img src="./out/orange_level_2.jpg" alt="Hybrid result">
+        <div class="grid-caption">Hybrid result</div>
+      </div>
+      <div>
+        <img src="./out/apple2.png" alt="high frequency image">
+        <div class="grid-caption">High frequency and aligned Nutmeg</div>
+      </div>
+      <div>
+        <img src="./out/oraple_final_before.png" alt="Hybrid result">
+        <div class="grid-caption">Hybrid result</div>
+      </div>
+      <div>
+        <img src="./out/orange2.png" alt="Fourier transforms">
+        <div class="grid-caption">Fourier Transform Result of Hybrid</div>
+      </div>
+      <div>
+        <img src="./out/apple1.png" alt="high frequency image">
+        <div class="grid-caption">High frequency and aligned Nutmeg</div>
+      </div>
+      <div>
+        <img src="./out/oraple_final.jpg" alt="high frequency image">
+        <div class="grid-caption">High frequency and aligned Nutmeg</div>
+      </div>
+      <div>
+        <img src="./out/orange1.png" alt="high frequency image">
+        <div class="grid-caption">High frequency and aligned Nutmeg</div>
+      </div>
+      
+    </div>
+
+
+</body>
+</html>
