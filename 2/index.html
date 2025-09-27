@@ -62,11 +62,26 @@
       color: #555;
     }
     code {
-      background-color: #f5f5f5;
+      background-color: #efe0bf;
       padding: 2px 4px;
       border-radius: 4px;
       font-size: 0.95em;
     }
+    .stack-image {
+      display: block;
+      margin: 20px auto;   /* center each one vertically stacked */
+      max-width: 800px;    /* or whatever width you want */
+      width: 100%;         /* scale down responsively */
+      height: auto;        /* keep aspect ratio */
+      border: 1px solid #ccc;
+    }
+    .stack-caption {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
   </style>
 </head>
 <body>
@@ -247,23 +262,26 @@
     <p>
       More sharpening filter results using `unsharpen` function:
     </p>
-    <div>
-        <img src="./out/sharper1.png" alt="Apple Laplacian stack">
-        <div class="grid-caption">Laplacian stack of Seville</div>
+    <div class="stack-container">
+      <img src="./out/sharper1.png" alt="Laplacian stack of Seville" class="stack-image">
+      <div class="stack-caption">Laplacian stack of Seville</div>
     </div>
-    <div>
-        <img src="./out/sharper2.png" alt="Apple Laplacian stack">
-        <div class="grid-caption">Laplacian stack of Arches</div>
+
+    <div class="stack-container">
+      <img src="./out/sharper2.png" alt="Laplacian stack of Arches" class="stack-image">
+      <div class="stack-caption">Laplacian stack of Arches</div>
     </div>
+
+    
     <h4>
       Applying unsharpen filter to blurry images:
     </h4>
     <p>
       Then, I applied the unsharpen function to a blurred image, the result contains less details but still has a really sharp appearance. It seemed that the process sharpened the really low frequencies because the higher frequencies and noise were eliminated when we applied a gaussian filter.
     </p>
-    <div>
-        <img src="./out/sharper_blur.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Laplacian stack of Alhambra</div>
+    <div class="stack-container">
+      <img src="./out/sharper_blur.png" alt="Laplacian stack of Alhambra" class="stack-image">
+      <div class="stack-caption">Laplacian stack of Alhambra</div>
     </div>
     <p>
       To evaluate, I compared the original sharp image with the sharpened result using the mean squared difference between pixels. The error was approximately 0.0078, indicating that sharpening recovered much of the original detail.
@@ -298,7 +316,7 @@
     </p>
     <div class="grid">
       <div>
-        <img src="./data/derek_updated.png" alt="Image 1">
+        <img src="./data/DerekPicture.jpg" alt="Image 1">
         <div class="grid-caption">Derek Input Image</div>
       </div>
       <div>
