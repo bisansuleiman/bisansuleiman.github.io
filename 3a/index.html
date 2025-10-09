@@ -35,13 +35,28 @@
       height: auto;
       border: 1px solid #ccc;
     }
+    .full-width-image {
+      width: 100%;
+      max-width: 100%;
+      margin: 20px 0;
+      text-align: center;
+    }
+
     .full-width-image img {
-      width: auto;
-      height: auto;
-      max-width: none;
+      width: 100%;      /* scale to fit screen width */
+      height: auto;     /* maintain aspect ratio */
       display: block;
       margin: 0 auto;
+      border: 1px solid #ccc;
+      max-width: 100%;  /* ensure it doesn’t overflow container */
     }
+
+    .full-width-image .grid-caption {
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
     .caption {
       margin-top: 8px;
       font-size: 0.9em;
@@ -103,17 +118,17 @@
     
     </p>
 
-    <div>
-        <img src="./out/a1_rotate.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
+    <div class="full-width-image">
+      <img src="./out/a1_rotate.png" alt="Orange Laplacian stack">
+      <div class="grid-caption">Rotating Images With Same Center of Projection</div>
     </div>
-    <div>
-        <img src="./out/a1_rotate2.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
+    <div class="full-width-image">
+      <img src="./out/a1_rotate2.png" alt="Orange Laplacian stack">
+      <div class="grid-caption">Rotating Images With Same Center of Projection</div>
     </div>
-    <div>
-        <img src="./out/a1_rotate3.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
+    <div class="full-width-image">
+      <img src="./out/a1_rotate3.png" alt="Orange Laplacian stack">
+      <div class="grid-caption">Rotating Images With Same Center of Projection</div>
     </div>
 
     <h3>A.2 - Recovering Homographies</h3>
@@ -128,25 +143,25 @@
 Ah=0 from point correspondences between im1_pts and im2_pts, where each point pair contributes two equations relating coordinates before and after transformation.
     </p>
 
-    <div>
+    <div class="full-width-image">
         <img src="./out/compute_H.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
     </div>
-    <div>
+    <div class="full-width-image">
         <img src="./out/h_coffee.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
     </div>
-    <div>
+    <div class="full-width-image">
         <img src="./out/h_laundry.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
     </div>
-    <div>
+    <div class="full-width-image">
         <img src="./out/h_sea.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
     </div>
-    <div>
+    <div class="full-width-image">
         <img src="./out/h_stairs.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
     </div>
 
     
@@ -154,7 +169,7 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
     
     <h3>A.3 Image Warping</h3>
     <p>
-      To begin my process, I took 2 images of a Louis Armstrong poster in different angles, the forward facing one being the reference image, and the tilted/angled one being the target image to warp.
+      To begin my process, I took 2 images of a Louis Armstrong poster from different angles, the forward facing one being the reference image, and the tilted/angled one being the target image to warp.
     </p>
 
     <p>
@@ -228,3 +243,4 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
   
 </body>
 </html>
+
