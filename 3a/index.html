@@ -176,9 +176,9 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
       I then selected 8 points in the reference image that correspond to the same points in the target image. Using these points, I computed the homography matrix that maps points from the target image to the reference image with my <code>compute_H</code> function.
     </p>
     
-    <div>
+    <div class="full-width-image">
         <img src="./out/louis_warp_bil.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Warping with Bilinear Interpolation</div>
+        <div class="grid-caption">Warping with Bilinear Interpolation</div>
     </div>
     <div class="image-row">
       <div class="image-container">
@@ -190,12 +190,30 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
         <div class="caption">Zoomed in with Bilinear Interpolation</div>
       </div>
     </div>
+    <h4>
+    More Warping with Bilinear Interpolation 
+  </h4>
+  <div class="full-width-image">
+        <img src="./out/warped_outlet_bil_full.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Warping with Nearest Neighbor Interpolation</div>
+    </div>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="./out/warped_outlet_bil.jpg" alt="Oraple">
+        <div class="caption">Warping with Nearest Neighbor Interpolation</div>
+      </div>
+      <!-- <div class="image-container">
+        <img src="./out/zoom_nn.png" alt="Custom blend 1">
+        <div class="caption">Zoomed in with Nearest Neighbor Interpolation</div>
+      </div> -->
+    </div>
+  </div>
     <p>
       With nearest neighbor interpolation, the images achieved a smoother blending between different pixels than with bilinear interpolation. While we see in bilinear interpolation that there appears to be almost a grid pattern present between every few pixels when covering the "holes" that emerge due to the homography transformation, nearest neighbor interpolation is able to fill in these gaps with the color of the nearest pixel, resulting in a more cohesive image.
     </p>
-    <div>
+    <div class="full-width-image">
         <img src="./out/lous_warp_nn.png" alt="Orange Laplacian stack">
-        <div class="full-width-image">Warping with Nearest Neighbor Interpolation</div>
+        <div class="grid-caption">Warping with Nearest Neighbor Interpolation</div>
     </div>
     <div class="image-row">
       <div class="image-container">
@@ -206,6 +224,24 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
         <img src="./out/zoom_nn.png" alt="Custom blend 1">
         <div class="caption">Zoomed in with Nearest Neighbor Interpolation</div>
       </div>
+    </div>
+  </div>
+  <h4>
+    More Warping with Nearest Neighbor 
+  </h4>
+  <div class="full-width-image">
+        <img src="./out/warped_outlet_nn_full.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Warping with Nearest Neighbor Interpolation</div>
+    </div>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="./out/warped_outlet_nn.jpg" alt="Oraple">
+        <div class="caption">Warping with Nearest Neighbor Interpolation</div>
+      </div>
+      <!-- <div class="image-container">
+        <img src="./out/zoom_nn.png" alt="Custom blend 1">
+        <div class="caption">Zoomed in with Nearest Neighbor Interpolation</div>
+      </div> -->
     </div>
   </div>
     <!-- <div class="grid"> -->
@@ -223,22 +259,22 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
       I then realized that using a distance transform for the mask is a much better approach. I was able to now reduce the mask to only the overlapping parts of the image, and then use a distance transform to create a smooth transition between both images
     </p>
 
-    
-    <div>
+
+    <div class="full-width-image">
         <img src="./out/coffee_blend.jpg" alt="Orange Laplacian stack">
-        <div class="full-width-image">Berkeley Espresso</div>
+        <div class="grid-caption">Berkeley Espresso</div>
     </div>
-    <div>
+    <div class="full-width-image">
         <img src="./out/laundry_blend.jpg" alt="Orange Laplacian stack">
-        <div class="full-width-image">Laundry Room</div>
+        <div class="grid-caption">Laundry Room</div>
     </div>
 
     <p>
       However, the area around the blending of both images still appears blurry in the first 2 mosaics, but I was able to get a much better transition on the last image. Perhaps this is due to the wrong homography matrix, or not enough overlapping points between the two images, I'm looking to explore this 
     </p>
-    <div>
+    <div class="full-width-image">
         <img src="./out/sea_blend.jpg" alt="Orange Laplacian stack">
-        <div class="full-width-image">Rainy day in Seattle</div>
+        <div class="grid-caption">Rainy day in Seattle</div>
     </div>
   
 </body>
