@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CS180 Project 3A: IMAGE WARPING and MOSAICING</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      margin-top: 40px;
+    }
+    h2 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+    .section {
+      margin-bottom: 50px;
+    }
+    .image-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .image-container {
+      text-align: center;
+      max-width: 30%;
+    }
+    .image-container img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+    .caption {
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #555;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 200px); /* fixed column width */
+      gap: 20px;
+      margin: 20px auto;         /* center the grid */
+      justify-content: center;   /* center grid items */
+    }
+
+    .grid img {
+      width: 100%;      /* force image to fit column */
+      max-width: 200px; /* don’t let it stretch bigger */
+      height: auto;     /* keep aspect ratio */
+      object-fit: contain; /* shrink properly inside cell */
+      border: 1px solid #ccc;
+    }
+    .grid-caption {
+      text-align: center;
+      margin-top: 6px;
+      font-size: 0.9em;
+      color: #555;
+    }
+    code {
+      background-color: #efe0bf;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    .stack-image {
+      display: block;
+      margin: 20px auto;   /* center each one vertically stacked */
+      max-width: 800px;    /* or whatever width you want */
+      width: 100%;         /* scale down responsively */
+      height: auto;        /* keep aspect ratio */
+      border: 1px solid #ccc;
+    }
+    .stack-caption {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>CS180 Project 3A: IMAGE WARPING and MOSAICING</h1>
+
+  <!-- Part 1 -->
+  <div class="section">
+
+    <h3>A.1 - Shoot the Pictures</h3>
+    <p>
+    
+    </p>
+
+    <div>
+        <img src="./out/a1_rotate.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+    </div>
+    <div>
+        <img src="./out/a1_rotate2.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+    </div>
+    <div>
+        <img src="./out/a1_rotate3.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+    </div>
+
+    <h3>A.2 - Recovering Homographies</h3>
+
+
+    <p>
+      I implemented the <code>compute_H</code> constructs a linear system 
+𝐴
+ℎ
+=
+0
+Ah=0 from point correspondences between im1_pts and im2_pts, where each point pair contributes two equations relating coordinates before and after transformation.
+    </p>
+
+    <div>
+        <img src="./out/compute_H.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+    </div>
+    <div>
+        <img src="./out/h_coffee.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+    </div>
+    <div>
+        <img src="./out/h_laundry.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+    </div>
+    <div>
+        <img src="./out/h_sea.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+    </div>
+    <div>
+        <img src="./out/h_stairs.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+    </div>
+
+    
+    
+    
+    <h3>A.3 Image Warping</h3>
+    <p>
+      To begin my process, I took 2 images of a Louis Armstrong poster in different angles, the forward facing one being the reference image, and the tilted/angled one being the target image to warp.
+    </p>
+
+    <p>
+      I then selected 8 points in the reference image that correspond to the same points in the target image. Using these points, I computed the homography matrix that maps points from the target image to the reference image with my <code>compute_H</code> function.
+    </p>
+    
+    <div>
+        <img src="./out/louis_warp_bil.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Warping with Bilinear Interpolation</div>
+    </div>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="./out/imwarped_bil_poster.jpg" alt="Oraple">
+        <div class="caption">Warping with Bilinear Interpolation</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/zoom_bil.png" alt="Custom blend 1">
+        <div class="caption">Zoomed in with Bilinear Interpolation</div>
+      </div>
+    </div>
+    <p>
+      With nearest neighbor interpolation, the images achieved a smoother blending between different pixels than with bilinear interpolation. While we see in bilinear interpolation that there appears to be almost a grid pattern present between every few pixels when covering the "holes" that emerge due to the homography transformation, nearest neighbor interpolation is able to fill in these gaps with the color of the nearest pixel, resulting in a more cohesive image.
+    </p>
+    <div>
+        <img src="./out/lous_warp_nn.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Warping with Nearest Neighbor Interpolation</div>
+    </div>
+    <div class="image-row">
+      <div class="image-container">
+        <img src="./out/imwarped_nn_poster.jpg" alt="Oraple">
+        <div class="caption">Warping with Nearest Neighbor Interpolation</div>
+      </div>
+      <div class="image-container">
+        <img src="./out/zoom_nn.png" alt="Custom blend 1">
+        <div class="caption">Zoomed in with Nearest Neighbor Interpolation</div>
+      </div>
+    </div>
+  </div>
+    <!-- <div class="grid"> -->
+  
+    <!-- </div> -->
+    
+
+    <h3>A.4 - Mosaics Results</h3>
+    <p>
+      This part proved to be the most challenging part of the project, as I had trouble getting a mask to work that results in a smooth blending and no black edges around it. 
+      I tried a few different approaches, including using a binary mask that is 1 where the warped image has valid pixels and 0 elsewhere, and then using this mask to blend the warped image with the reference image. However, this approach resulted in visible seams between the two images since it was a mask around only the pixels of the warped image
+    </p>
+
+    <p>
+      I then realized that using a distance transform for the mask is a much better approach. I was able to now reduce the mask to only the overlapping parts of the image, and then use a distance transform to create a smooth transition between both images
+    </p>
+
+    
+    <div>
+        <img src="./out/coffee_blend.jpg" alt="Orange Laplacian stack">
+        <div class="grid-caption">Berkeley Espresso</div>
+    </div>
+    <div>
+        <img src="./out/laundry_blend.jpg" alt="Orange Laplacian stack">
+        <div class="grid-caption">Laundry Room</div>
+    </div>
+
+    <p>
+      However, the area around the blending of both images still appears blurry in the first 2 mosaics, but I was able to get a much better transition on the last image. Perhaps this is due to the wrong homography matrix, or not enough overlapping points between the two images, I'm looking to explore this 
+    </p>
+    <div>
+        <img src="./out/sea_blend.jpg" alt="Orange Laplacian stack">
+        <div class="grid-caption">Rainy day in Seattle</div>
+    </div>
+  
+</body>
+</html>
