@@ -35,6 +35,13 @@
       height: auto;
       border: 1px solid #ccc;
     }
+    .full-width-image img {
+      width: 100%;
+      height: auto;
+      max-width: 100vw;
+      display: block;
+      margin: 0 auto;
+    }
     .caption {
       margin-top: 8px;
       font-size: 0.9em;
@@ -98,15 +105,15 @@
 
     <div>
         <img src="./out/a1_rotate.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
     </div>
     <div>
         <img src="./out/a1_rotate2.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
     </div>
     <div>
         <img src="./out/a1_rotate3.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
     </div>
 
     <h3>A.2 - Recovering Homographies</h3>
@@ -123,23 +130,23 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
 
     <div>
         <img src="./out/compute_H.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
     </div>
     <div>
         <img src="./out/h_coffee.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
     </div>
     <div>
         <img src="./out/h_laundry.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
     </div>
     <div>
         <img src="./out/h_sea.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
     </div>
     <div>
         <img src="./out/h_stairs.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Rotating Images With Same Center of Projection</div>
+        <div class="full-width-image">Rotating Images With Same Center of Projection</div>
     </div>
 
     
@@ -156,7 +163,7 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
     
     <div>
         <img src="./out/louis_warp_bil.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Warping with Bilinear Interpolation</div>
+        <div class="full-width-image">Warping with Bilinear Interpolation</div>
     </div>
     <div class="image-row">
       <div class="image-container">
@@ -173,7 +180,7 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
     </p>
     <div>
         <img src="./out/lous_warp_nn.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Warping with Nearest Neighbor Interpolation</div>
+        <div class="full-width-image">Warping with Nearest Neighbor Interpolation</div>
     </div>
     <div class="image-row">
       <div class="image-container">
@@ -204,11 +211,11 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
     
     <div>
         <img src="./out/coffee_blend.jpg" alt="Orange Laplacian stack">
-        <div class="grid-caption">Berkeley Espresso</div>
+        <div class="full-width-image">Berkeley Espresso</div>
     </div>
     <div>
         <img src="./out/laundry_blend.jpg" alt="Orange Laplacian stack">
-        <div class="grid-caption">Laundry Room</div>
+        <div class="full-width-image">Laundry Room</div>
     </div>
 
     <p>
@@ -216,7 +223,7 @@ Ah=0 from point correspondences between im1_pts and im2_pts, where each point pa
     </p>
     <div>
         <img src="./out/sea_blend.jpg" alt="Orange Laplacian stack">
-        <div class="grid-caption">Rainy day in Seattle</div>
+        <div class="full-width-image">Rainy day in Seattle</div>
     </div>
   
 </body>
