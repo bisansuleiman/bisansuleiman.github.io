@@ -1,1 +1,266 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CS180 Project 4: Neural Radiance Field</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      margin-top: 40px;
+    }
+    h2 {
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+    .section {
+      margin-bottom: 50px;
+    }
+    .image-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .image-container {
+      text-align: center;
+      max-width: 30%;
+    }
+    .image-container img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+    .full-width-image {
+      width: 60%;
+      max-width: 70%;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .full-width-image img {
+      width: 100%;      /* scale to fit screen width */
+      height: auto;     /* maintain aspect ratio */
+      display: block;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+      max-width: 100%;  /* ensure it doesn’t overflow container */
+    }
+
+    .full-width-image .grid-caption {
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+    .caption {
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #555;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 200px); /* fixed column width */
+      gap: 20px;
+      margin: 20px auto;         /* center the grid */
+      justify-content: center;   /* center grid items */
+    }
+
+    .grid img {
+      width: 100%;      /* force image to fit column */
+      max-width: 200px; /* don’t let it stretch bigger */
+      height: auto;     /* keep aspect ratio */
+      object-fit: contain; /* shrink properly inside cell */
+      border: 1px solid #ccc;
+    }
+    .grid-caption {
+      text-align: center;
+      margin-top: 6px;
+      font-size: 0.9em;
+      color: #555;
+    }
+    code {
+      background-color: #efe0bf;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+    .stack-image {
+      display: block;
+      margin: 20px auto;   /* center each one vertically stacked */
+      max-width: 800px;    /* or whatever width you want */
+      width: 100%;         /* scale down responsively */
+      height: auto;        /* keep aspect ratio */
+      border: 1px solid #ccc;
+    }
+    .stack-caption {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 0.9em;
+      color: #555;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>CS180 Project 4: Neural Radiance Field</h1>
+
+  <!-- Part 1 -->
+  <div class="section">
+
+    <h3>Part 0 - Camera Calibration and 3D Scanning</h3>
+
+    <p>
+      Screenshots of camera frustums visualization in Viser
+    </p>
+
+    <div class="full-width-image">
+      <img src="./out/render4.png" alt="Orange Laplacian stack">
+      <div class="grid-caption">Camera Frustum 1</div>
+    </div>
+    <div class="full-width-image">
+      <img src="./out/render5.png" alt="Orange Laplacian stack">
+      <div class="grid-caption">Camera Frustum 2</div>
+    </div>
+
+    <h3>Part 1 - Fit a Neural Field to a 2D Image</h3>
+
+
+    <h4>
+        Model architecture and training report:
+    </h4>
+    <p>
+        For this part of the project, I implemented a simple MLP with 4 hidden layers of 128 neurons each, using ReLU activations. I also included positional encoding with a maximum frequency of 10 to help the model capture high-frequency details in the image. I trained the model using the Adam optimizer with a learning rate of 0.001 and a batch size of 1024 for a total of 1000 iterations. The loss function used was Mean Squared Error (MSE) between the predicted pixel colors and the ground truth pixel colors.
+    </p>
+    <h4>
+      Test image progression
+    </h4>
+
+    <div class="full-width-image">
+        <img src="./image1_iter_20.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 20</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./image1_iter_40.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 40</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./image1_iter_100.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 100</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./image1_iter_300.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 300</div>
+    </div>
+     <div class="full-width-image">
+        <img src="./image1_iter_900.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 900</div>
+    </div>
+
+
+    <h4>
+      Own image progression
+    </h4>
+
+    <div class="full-width-image">
+        <img src="./out/image2_iter_20.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 20</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./out/image2_iter_40.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 40</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./out/image2_iter_100.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 100</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./out/image2_iter_300.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 300</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./out/hw-lf/image2_iter_999.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Predicted test image at iteration 1000</div>
+    </div>
+    <h4>
+      2x2 Grid - max positional encoding frequency and width combos 
+    </h4>
+    
+    <div class="full-width-image">
+        <img src="./out/lw-lf/image2_iter_999.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Low-Width, Low Frequency: at iteration 1000</div>
+    </div>
+        <div class="full-width-image">
+        <img src="./out/hw-lf/image2_iter_999.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">High-Width, Low Frequency: at iteration 1000</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./out/hw-hf/image2_iter_999.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">High-Width, High Frequency: at iteration 1000</div>
+    </div>
+        <div class="full-width-image">
+        <img src="./out/lw-hf/image2_iter_999.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Low-Width, High Frequency: at iteration 1000</div>
+    </div>
+    
+
+    <h4>
+        PSNR curve for training my own image 
+    </h4>
+    <div class="full-width-image">
+        <img src="./out/hw-lf/psnr_curve_img2.png" alt="PSNR Curve">
+        <div class="grid-caption">PSNR Curve for Image2</div>
+    </div>
+    <h3>Part 2</h3>
+    <p>
+      For the feature matching, I iterated through each feature descriptor and identified its 2 nearest neighbors in the other image using Lowe's ratio test, and was able to set a threshold of 0.7 for this image that filtered out most bad matches. Then I displayed the matches across both images, and adjusted the parameters to get a good number of accurate matches.
+    </p>
+    
+    <div class="full-width-image">
+        <img src="./out/matching.png" alt="Orange Laplacian stack">
+        <div class="grid-caption">Warping with Bilinear Interpolation</div>
+    </div>
+  </div>
+    <h3>B.4 - Mosaics Results</h3>
+    <p>
+      Using my mask and mosiac blending implementation from part 3A, I was able to use the created homography matrix to warp and blend my two images in Mountain Tamalpais, and it seemed that everything worked out, since the only thing I really changed was the values of the homography matrix H. 
+     </p>
+
+     <p>
+      I then used the same process on another set of images of Kresge Library, and they also seemed to blend well using the same threshold, c, and min_distance values as the Mountain Tamalpais image.
+     </p>
+
+    <p>
+      
+    </p>
+
+
+    <div class="full-width-image">
+        <img src="./out/tam_blend.jpg" alt="Orange Laplacian stack">
+        <div class="grid-caption">Mountain Tamalpais</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./out/kresge_blend.jpg" alt="Orange Laplacian stack">
+        <div class="grid-caption">Kresge Library</div>
+    </div>
+
+    <p>
+      However, when I tried to use the same process on the coffee shop image sets I used in part A of the project, the automatic feature matching did not work well, and the images were misaligned significantly. I tried to lower the threshold min_distance values, which reduced the blurring in the blending, but it still did not compare to the manual stitching mosiac result from part A. I believe that the automatic feature matching simply did not find good enough corresponding points and features perhaps due to how busy the image was, while with the manual selection, I was able to pick out the best points to align the images well.
+    </p>
+    <div class="full-width-image">
+        <img src="./out/coffee_blend.jpg" alt="Orange Laplacian stack">
+        <div class="grid-caption">Coffee Shop Blend with Automatic Stitching</div>
+    </div>
+    <div class="full-width-image">
+        <img src="./out/coffee_blend_manual.jpg" alt="Orange Laplacian stack">
+        <div class="grid-caption">Coffee Shop Blend with MANUAL Stitching</div>
+    </div>
+  
+</body>
+</html>
