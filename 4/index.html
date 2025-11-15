@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -218,49 +217,64 @@
         <div class="grid-caption">PSNR Curve for Image2</div>
     </div>
     <h3>Part 2</h3>
+    <h4>
+        2.1 - Create Rays from Camera
+    </h4>
     <p>
-      For the feature matching, I iterated through each feature descriptor and identified its 2 nearest neighbors in the other image using Lowe's ratio test, and was able to set a threshold of 0.7 for this image that filtered out most bad matches. Then I displayed the matches across both images, and adjusted the parameters to get a good number of accurate matches.
+        <code>pixel_to_camera</code> implementation:I take in 2D pixel coordinates (uv), the camera intrinsic matrix K, and a depth value s. I then transform these pixel coordinates into 3D camera coordinates by inverting the projection equation s[u,v] = K * x_c. My implementation handles both single points and batched inputs, automatically expanding scalar depth values across batches when needed.
+    </p>
+
+    <p>
+        <code>pixel_to_ray</code>  implementation: I convert 2D pixel coordinates into 3D rays in world space. Given pixel locations (uv), intrinsic matrix K, and camera-to-world transformation c2w, I first find a point along the ray at depth s=1 in camera coordinates using pixel_to_camera, then transform it to world coordinates. I extract the ray origin r_o from the camera position (c2w[:3, 3]) and compute the ray direction r_d as the vector from r_o to the transformed point. I normalize only r_d (not r_o) to get unit direction vectors. My implementation handles both single and batched inputs.
+    </p>
+    <h4>
+        2.2 - Sampling
+    </h4>
+    <p>
+        <code>sample_rays</code>: I sample rays from multiple images and points along those rays. First, I randomly select n images and sample num_rays=n//m random pixel coordinates from each image. For each pixel, I add a 0.5 offset to the UV coordinates to align with the image grid, then convert them to rays using pixel_to_ray. Next, I sample points along each ray by creating linearly spaced t values between near and far bounds. During training, I add random perturbations to t within each interval to improve sampling. Finally, I compute 3D point coordinates using the ray equation x = r_o + r_d * t.
+    </p>
+    <p>
+        <code>RaysDataLoader</code>: I pre-compute and efficiently manage rays for an entire dataset. At initialization, I generate all rays for every pixel in every image using pixel_to_ray, storing ray origins, directions, and pixel colors in flattened arrays on the CPU to manage memory. When sampling, I randomly select images and pixel indices, then move only the selected rays to the GPU for training. This approach is more efficient than the first method—instead of computing rays on-the-fly, I pre-compute everything once and use fast indexing for sampling. I also provide sample_along_rays to generate 3D sample points along rays using the equation x = r_o + r_d * t, with optional perturbation during training.
+    </p>
+
+    <h4>
+        2.3 - Ray visualization
+    </h4>
+    <div class="full-width-image">
+        <img src="./out/2-3render.png" alt="Ray Visualization">
+        <div class="grid-caption">Ray Visualization for Lego Dataset</div>
+    </div>
+    <h4>
+        2.4 - Neural Radiance Field
+    </h4>
+    <p>
+        <code>NeuralRadianceField</code>: I implement a NeRF model that predicts color and density for 3D points. I use positional encoding on both 3D coordinates (p_freq=10) and view directions (d_freq=4). My architecture follows the original NeRF design with 8 layers: first, I process position encodings through 4 layers, then apply a skip connection by concatenating the original position encoding, followed by 4 more layers. For density prediction, I use a single linear layer with Softplus activation (instead of ReLU) to ensure smooth, positive density values. For color prediction, I concatenate the view direction encoding with the features and pass them through two layers with Sigmoid output to produce RGB values in [0,1]. The key design choice is that density is view-independent while color is view-dependent, allowing the model to capture view-dependent effects like specularities.
+    </p>
+    <p>
+        <code>PositionalEncoding3d</code>: I transform 3D coordinates into high-dimensional encodings using sinusoidal functions. For each input coordinate, I generate frequency bands from 2^0 to 2^(max_freq-1) and apply sine and cosine functions at each frequency. I concatenate the original coordinates with all the encoded values, producing an output dimension of 3 + 3×2×max_freq. This encoding helps the network learn high-frequency details in the scene.
     </p>
     
-    <div class="full-width-image">
-        <img src="./out/matching.png" alt="Orange Laplacian stack">
-        <div class="grid-caption">Warping with Bilinear Interpolation</div>
-    </div>
-  </div>
-    <h3>B.4 - Mosaics Results</h3>
-    <p>
-      Using my mask and mosiac blending implementation from part 3A, I was able to use the created homography matrix to warp and blend my two images in Mountain Tamalpais, and it seemed that everything worked out, since the only thing I really changed was the values of the homography matrix H. 
-     </p>
 
-     <p>
-      I then used the same process on another set of images of Kresge Library, and they also seemed to blend well using the same threshold, c, and min_distance values as the Mountain Tamalpais image.
-     </p>
+      <h4>
+        2.5 - Volume Rendering
+    </h4>
+    <p>
+        <code>volrend</code>: Given densities (B, N, 1) and colors (B, N, 3) from N samples along B rays, I use the volume rendering equation to accumulate colors weighted by transmittance and opacity. First, I compute the probability of ray termination at each sample as α_i = 1 - exp(-σ_i × δ), where σ_i is density and δ is step_size. Then I calculate cumulative transmittance T_i as the product of (1 - α_j) for all samples j before i, using torch.cumprod and prepending ones to handle the first sample. Finally, I compute the rendered color as the sum of T_i × α_i × c_i across all samples, which represents how much each sample contributes to the final pixel color based on its opacity and how much light reaches it. My output is (B, 3) RGB colors for each ray.
+    </p>
+
+    <p>
+        Training Script: I train the NeRF model using ray-based sampling and volume rendering. Each iteration, I sample a batch of rays from multiple training images using RaysDataLoader, then sample n_samples=64 points along each ray between near=2.0 and far=6.0 with random perturbations during training. I pass the 3D points and ray directions to the network (letting it handle direction expansion internally), compute rendered colors using volume rendering, and optimize with MSE loss against ground truth pixels. Every 100 iterations, I validate by rendering full images in batches to avoid memory issues, computing PSNR for each validation image and averaging the results. I use batch_size=4096, learning_rate=1e-3, and train for 1000 iterations, visualizing and saving validation results throughout training.
+    </p>
+
+    
+  </div>
+    <h3>2.6 - Training with your own data</h3>
+    
 
     <p>
       
     </p>
 
-
-    <div class="full-width-image">
-        <img src="./out/tam_blend.jpg" alt="Orange Laplacian stack">
-        <div class="grid-caption">Mountain Tamalpais</div>
-    </div>
-    <div class="full-width-image">
-        <img src="./out/kresge_blend.jpg" alt="Orange Laplacian stack">
-        <div class="grid-caption">Kresge Library</div>
-    </div>
-
-    <p>
-      However, when I tried to use the same process on the coffee shop image sets I used in part A of the project, the automatic feature matching did not work well, and the images were misaligned significantly. I tried to lower the threshold min_distance values, which reduced the blurring in the blending, but it still did not compare to the manual stitching mosiac result from part A. I believe that the automatic feature matching simply did not find good enough corresponding points and features perhaps due to how busy the image was, while with the manual selection, I was able to pick out the best points to align the images well.
-    </p>
-    <div class="full-width-image">
-        <img src="./out/coffee_blend.jpg" alt="Orange Laplacian stack">
-        <div class="grid-caption">Coffee Shop Blend with Automatic Stitching</div>
-    </div>
-    <div class="full-width-image">
-        <img src="./out/coffee_blend_manual.jpg" alt="Orange Laplacian stack">
-        <div class="grid-caption">Coffee Shop Blend with MANUAL Stitching</div>
-    </div>
   
 </body>
 </html>
