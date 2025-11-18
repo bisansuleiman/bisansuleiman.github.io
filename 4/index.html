@@ -241,7 +241,7 @@
         2.3 - Ray visualization
     </h4>
     <div class="full-width-image">
-        <img src="./out/2-3render.png" alt="Ray Visualization">
+        <img src="./out/2-3/render_new_1.png" alt="Ray Visualization">
         <div class="grid-caption">Ray Visualization for Lego Dataset</div>
     </div>
     <h4>
@@ -266,15 +266,85 @@
         Training Script: I train the NeRF model using ray-based sampling and volume rendering. Each iteration, I sample a batch of rays from multiple training images using RaysDataLoader, then sample n_samples=64 points along each ray between near=2.0 and far=6.0 with random perturbations during training. I pass the 3D points and ray directions to the network (letting it handle direction expansion internally), compute rendered colors using volume rendering, and optimize with MSE loss against ground truth pixels. Every 100 iterations, I validate by rendering full images in batches to avoid memory issues, computing PSNR for each validation image and averaging the results. I use batch_size=4096, learning_rate=1e-3, and train for 1000 iterations, visualizing and saving validation results throughout training.
     </p>
 
+
+    <h4>
+        Volume Rendering Lego Dataset
+    </h4>
+    <p>
+        For this section, I struggled to get a good validation result of a PSNR value above 13 at first. I discovered that my <code>volrend</code> function was formatted incorrectly, which was leading to rendering inaccuracies for my ray to pixel values. Then, I was able to raise my PSNR value to around 17, but I still was not able to achieve the needed validation PSNR of 23. After attending office hours and a lot of debugging, we realized that some of the near and far values could be readjusted, and I could increase the batch size from 1000, to 10K. The near and far values also changed to the given values in Ed, and I was able to get to a PSNR value of 23 after around 1000 rotations, and ~25 PSNR after 2000 iterations.
+
+    </p>
+    <div class="full-width-image">
+        <img src="./out/2-5/psnr_curve.png" alt="Ray Visualization">
+        <div class="grid-caption">PSNR curve of Lego Dataset</div>
+    </div>
+    <div class="full-width-image">
+        <video src="./out/2-5/lego_spherical.mp4" alt="Ray Visualization">
+        <div class="grid-caption">novel view image of lego dataset</div>
+    </div>
+
+    <h4>
+        more on the Lego dataset at each step
+    </h4>
+    <div class="full-width-image">
+        <img src="./out/2-5/new/val_iter_200.png" alt="Ray Visualization">
+        <div class="grid-caption"></div>
+    </div>
+  <div class="full-width-image">
+        <img src="./out/2-5/new/val_iter_400.png" alt="Ray Visualization">
+        <div class="grid-caption"></div>
+    </div>
+      <div class="full-width-image">
+        <img src="./out/2-5/new/val_iter_1100.png" alt="Ray Visualization">
+        <div class="grid-caption"></div>
+    </div>
+      <div class="full-width-image">
+        <img src="./out/2-5/new/val_iter_1700.png" alt="Ray Visualization">
+        <div class="grid-caption"></div>
+    </div>
+
+
     
   </div>
     <h3>2.6 - Training with your own data</h3>
     
 
     <p>
-      
-    </p>
-
+      For this section, I struggled to get a good validation result of a PSNR value above 13 as well at first. Also after fixing the <code>volrend</code> function from 2.5 for the Lego dataset, I had a hard time achieving the same PSNR values for validation as the Lego dataset. After attending office hours I realized that the network is taking much longer to learn my images as my images were much larger (3x the size) than the image dimensions of the lego dataset. Therefore I ended up resizing each image in the dataset to around 300x240 pixels, instead of aroun 1200 originally. This very much improved my PSNR value, and I was able to get to a PSNR of ~20 much faster in the network than earlier. However, my rendered images were not that clear, and I still struggled to obtain a good novel camera view towards the end. Please be nice with the grading of this section, I'm turning this late already, and it was quite a hard project. I really tried ...
+      </p>
   
+
+         <p>
+            I then ended up running this script with a near=0.02 and a far=1.0, and I was able to get pretty good validation results, almost of ~20 PSNR after 10K iterations. However, again, this did not translate well in my novel view
+      </p>
+
+    </div>
+        <div class="full-width-image">
+        <img src="./out/2-6/psnr_curve.png" alt="Ray Visualization">
+        <div class="grid-caption">Loss training curve</div>
+    </div>
+    </div>
+        <div class="full-width-image">
+        <img src="./out/2-6/val_img0_iter_5300.png" alt="Ray Visualization">
+        <div class="grid-caption">validation rendered result at iter=5300</div>
+    </div>
+      <div class="full-width-image">
+        <img src="./out/2-6/val_img0_iter_7700.png" alt="Ray Visualization">
+        <div class="grid-caption">validation rendered resul at iter=7700</div>
+    </div>
+         <div class="full-width-image">
+        <img src="./out/2-6/val_img0_iter_9200.png" alt="Ray Visualization">
+        <div class="grid-caption">validation rendered result at iter=9200</div>
+    </div>
+    </div>
+         <div class="full-width-image">
+        <img src="./out/2-6/val_img0_iter_9700.png" alt="Ray Visualization">
+        <div class="grid-caption">validation rendered result at iter=9700</div>
+    </div>
+
+         <div class="full-width-image">
+        <img src="./out/2-6/rotation.gif" alt="Ray Visualization">
+        <div class="grid-caption">novel view image of lego dataset</div>
+    </div>
 </body>
 </html>
